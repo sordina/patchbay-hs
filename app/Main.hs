@@ -100,8 +100,6 @@ consumeBody req f = do
   b <- getRequestBodyChunk req
   unless (Data.ByteString.null b) do f b >> consumeBody req f
 
-newQueueDeterminedBySize :: Int -> Stream a -> (a -> IO ()) -> IO ()
-
 newTBQueue :: Natural -> STM.STM (Q a)
 newTBQueue n = TQ <$> STM.newTBQueue n
 
@@ -122,3 +120,4 @@ maybeDupQ x = return x
 
 mkHeaders :: Query -> [(CI ByteString, ByteString)]
 mkHeaders qs = Prelude.map (bimap (Data.CaseInsensitive.mk . Data.ByteString.drop 7) (fromMaybe "")) $ Prelude.filter (Data.ByteString.isPrefixOf "header-" . fst) qs
+
